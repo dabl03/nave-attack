@@ -211,6 +211,11 @@
 				function move_enemigo_abajo(){
 					for (var e=0; e<enemigo.length; e++){
 							enemigo[e].move_all( enemigo[e].dim.x,enemigo[e].dim.y+enemigo[e].speed );
+							if ( enemigo[e].dim.y>=nave.dim.y ){
+								/*Si el enemigo llega a la posicion de la nave: Entonces se termina el juego.*/
+								nave.life=-1;
+								break;
+							}
 					}
 				}
 				function CO(){/*Este es el segundo interval: set[1]=setInterval( CO );*/
@@ -295,7 +300,8 @@
 			function reiniciar(){/*reinicia el juego*/
 				nave.recuperate( 3 );
 				S( false );
-				for ( var e=0,padre=D( "almacenEn" ); e<enemigo.length; e++ ){/*Eliminamos todos los enemigos.*/
+				/*Para eliminar todo el arrays debemos empezar por el ultimo elemento y hací evitar que el indice camine por una posicion no adecuada.*/
+				for ( var e=enemigo.length-1,padre=D( "almacenEn" ); e>=0; e-- ){/*Eliminamos todos los enemigos.*/
 					enemigo[e].person.removeChild( enemigo[e].disparo.person );
 					padre.removeChild( enemigo[e].person );
 					padre.removeChild( enemigo[e].person_impart );
