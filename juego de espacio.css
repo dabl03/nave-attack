@@ -1,0 +1,102 @@
+body{
+	background-color:black;
+	overflow:hidden;
+}
+#contenedor,.spacio,#fondo,#control,.disparo,.EN1,#rey_enemigo,#ataqueE,#vida{
+	position:absolute;
+}
+#mina_voladora,#rey_enemigo,.EN1,.nave2,#nave,.spacio,#vida  div{
+	background-repeat:no-repeat;
+	background-size:100%;
+}
+.spacio{
+	background-image:url( "./img/spacio.bmp" );
+	left:0px;
+	width:100vw;
+	height:100vh;
+	display:inline;
+}
+#fondo{
+	top:0%;
+	left:0%;
+	width:100%;
+	height:100%;
+	z-index:4;
+}
+/*Naves de muestra y el jugador.*/
+.nave{
+	width:30px;
+	height:20px;
+	background-image:url( "./img/nave.bmp" );
+	display:block;
+	z-index:2;
+}
+/*Nave del jugador.*/
+#nave{
+	position:fixed;
+	top:90%;
+	left:0px;
+}
+/*Nave siendo atacada.*/
+#naveAtack{
+	position:fixed;
+	display:none;
+	width:30px;
+	height:20px;
+	top:90%;
+}
+/*Naves de muestras.*/
+#vida{
+	position:fixed;
+	left:0;
+	top:45%;
+	z-index:2;
+}
+#vida  div{
+	margin-top:5px;
+	border-top:2px solid red;
+	border-bottom:1px solid yellow;
+	position:relative;
+	
+}
+
+/*Disparo nave principal.*/
+.disparo{
+	position:fixed;
+	width:5px;
+	height:20px;
+	background-color:red;
+	display:none;
+	z-index:1;
+}
+/*Disparo enemigo.*/
+.EN1 .disparo{
+	height:18px;
+	background-color:white;
+	border:2px solid gray
+}
+/*EN1: Enemigo 1.*/
+.EN1{
+	width:30px;
+	height:30px;
+	background-image:url( "./img/enemigo1.bmp" );
+	left:0%;
+	top:0%;
+	z-index:2;
+}
+#EN1_impart{
+	background-image:url( "./img/enemigo1A.bmp" );
+	display:none;
+}
+#rey_enemigo{
+	background-image:url( "./img/rey_enemigo.bmp" );
+	width:5%;
+	height:5%;
+	background-size:10%;
+}
+#mina_voladora{
+	background-image:url( "./img/mina1.bmp" );
+	width:25px;
+	height:25px;
+	z-index:3;
+}

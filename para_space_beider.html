@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="es" onclick="F2(event)" onmousemove="nave.move_x( event.clientX );">
+	<head>
+		<title>Space Beider( copia ).</title>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" href="./juego de espacio.css"/>
+		<style>
+		</style>
+	</head>
+	<body >
+		<!--Imagenes de la nave para simbolizar la vida del jugador en el lado derecho de la pantalla.-->
+		<div id="vida">
+			<!--generado por JavaScript-->
+		</div>
+		<div id="contenedor">
+			<div class="spacio" id="S1"></div>
+			<div class="spacio" id="S2"></div>
+			<div class="spacio" id="S3"></div>
+			<div class="spacio" id="S4"></div>
+			<div id="fondo">
+				<!--Utilizo css para la nave porque no solo la nave será la que va a llevar la imagen.-->
+				<div id="nave" class="nave"></div>
+				<!--Uso la etiqueta img para las naves atacadas porque solo nesecito una.-->
+				<img src="./img/nave_atacada.bmp" id="naveAtack" alt="nave_atacada"/>
+				<div id="mina_voladora"></div>
+			</div>
+			<div id="almacenDis">/*para almacenar las balas generadas por JS.*/</div>
+			<!--<div id="almacenAtackE"></div>-->
+			<div id="almacenEn"></div>
+		</div>
+		<button type="button" onclick="reiniciar()" id="reiniciar">REINICIAR</button>
+		<script src="./juego de espacio.js"></script>
+		<script>
+			"uses strict";
+			/*Crear un intervalo o una reques animation para mover el fondo y los personajes.
+				En el intervalo actual es el que usaremos para determinar todo.
+				Tambien modificar el juego para que sea pantalla compreta.
+				TODO HACER: Agregar mas enemigos.
+				Usalo para remover los mountros que pierde y buca una funcion para agregar objetos para el proximo nivel.
+				Tambien modificar las clases para que tenga power attack que definira el daño del imparto con el enemigo o el jugador.
+				Tambien has comodines para: darle mas vidas al jugador, hacerlo invensible, aumentar el poder de atake de los disparos.
+				Tambien has un menu de inicio como tu otro juego, con el fondo de espacio.
+				Tambien crea una imagen de perdio, otros enemigos y un rey.*/
+			/*Recuerda Daniel el metodo splice del arrays acepta: splice( indice,/*?* /for_eliminar, ...items ); si se le pasa true a for_eliminar entonces se elimina el objeto, si se le pasa false se appenea un objeto en la posicion indicada.*/
+			/*constantes\/*/
+			const ta=[ screen.width,screen.availHeight ],
+					MAX_Y=ta[1],
+					MAX_DISPAROS=20,
+					MAX_FONDO_Y=ta[1]*2,
+					MAX_ENEMIGOS=3,//40,
+					HEIGHT_FONDO=ta[1];
+					/*TODO HACER: Cuando termines de hacer este juego debes cambiar este valor absoluto por uno relativo.*/
+			/*							( dims,life,person,person_impart,mostrar_life,disparos,count=0 )*/
+			var nave=new naves( /*MAX_Y es 360 debes cambiarlo al tamaño casi maximo de la pantalla con screen.availY-(screen.availY*95/100).*/
+				new dim2d(0,MAX_Y,30,20),/*dim*/
+				4,/*life*/
+				D("nave"),/*Person*/
+				D( "naveAtack" ),/*person_impart*/
+				[4],/*mostrar_life*/
+				[ ],/*Disparos o attack.*/
+				undefined/*speed: Aqui no es necesario porque la velocidad la determina el usuario.*/
+			),fondo=[5],/*Será el contenedor de nuestro fondo.*/
+				enemigo=[ ],/*Será el contenedor para la clase enemigo.*/
+				second_enemigo_abajo=1000*30,
+			set=[3],/*setInterval retrun CU;*/
+			es_momento_de_mover_enemigo=true/*Es para determinar si el enemigo se moverá o nó.*/;
+			/*Creamos nuevos elementos para simbolizar la vida de los jugadores.*/
+			nave.dim.y-=nave.dim.h * ( Math.sqrt( ta[1] )/4 );
+			update( nave.person,nave.dim );
+			update( nave.person_impart,nave.dim );
+			for ( var l=0,padre=D("vida"); l<=nave.life; l++){
+				nave.mostrar_life[l]=document.createElement("div");
+				nave.mostrar_life[l].setAttribute("id","vida"+l);
+				nave.mostrar_life[l].setAttribute("class","nave");
+				padre.appendChild( nave.mostrar_life[l] );
+			}
+			/*onclick: Creamos una nueva bala.*/
+			function F2(event){
+				var count=nave.disparo.length;/*Solo comodidad.*/
+				nave.disparo.splice( 
+					count,/*Indice para agregar.*/
+					false,/*Is deleted. No queremos eliminar un objeto lo que queremos es agregarlo*/
+					new disparos( /*value*/
+						new dim2d(
+							nave.dim.x,/*x: es nulo porque despues le asignaremos valor. Si quieres cambias el valor nulo por los valores correspondiente: mouse_x[0], nave.dim.y . No tendrá efecto al menos que elimines la funcion move_all que será usada mas adelante en el codigo.*/
+							nave.dim.y,/*y: es nulo por la misma razon que x.*/
+							5,/*w*/
+							20/*h*/
+						),
+						undefined,/*life: No la nesecitamos si podemos eliminar el arrays.*/
+						CRE("div"),/*person.*/
+						3.1415926535897932384626433832795/*speed: Math.PI*/
+					)
+				);
+				D( "almacenDis" ).appendChild( nave.disparo[ count ].person );
+				nave.disparo[ count ].person.setAttribute( "class","disparo" );/*Le agregamos el estilo.*/
+				nave.disparo[ count ].person.style.display="block";
+				update( nave.disparo[ count ].person,nave.disparo[ count ].dim );
+				/**Has que el jugador inicialize la posicion usando el JS y no el CSS.
+					Te deseo suerte daniel este codigo tiene resultados perores que los anteriores.*/
+				/*
+					Los Enemigos solo disparán una ves por lo que no tienes que crear un arrays disparo enemigo.
+					Antes el enemigo se veia muy pequeño averigua porque, pero averigua antes porque ahora no se vé.
+					Tambien debes terminar la clase disparo.
+					Tambien debes hacer que esto se apdate a toda patalla. Por lo que quiero jugar este juego en mi telefono.
+					intenta usar el codigo del juego de Ping Pong de HTML para lograr esto.
+				*/
+			}
+			function ganar(){
+				if( confirm( "FELICIDADES ME HAS GANADO QUIERES BOLBER A JUGAR...") ){
+					reiniciar();
+				}else{
+					S( false );
+					alert("GRACIAS POR JUGAR");
+				}
+			}
+			function reset(){/*Inicializamos todas las variables necesaria para el juego.*/
+				for ( var e=0,padre=D( "almacenEn" ),x=34,y=5,w=x,h=44,count=0; count<MAX_ENEMIGOS; e++,x+=w+w ){
+					enemigo.splice( e, false ,new enemigos(/*Jeje Cuantos comentarios.*/
+						new dim2d( x,y,w,h ),/*dim*/
+							4,/*life*/
+							CRE("div"),/*Person.*/
+							CRE("div"),/*Person impart.*/
+							new disparos(
+								new dim2d(
+									null,/*x:dim:disparo*/
+									null,/*y:dim:disparo*/
+									5,/*w:dim:disparo*/
+									18/*h:dim:disparo*/
+									),/*dim:disparo*/
+								false,/*life:disparo*//*False por no existe esta bala.*/
+								CRE( "div" )/*person:disparo*/
+							),/*Disparo.*/
+							50,/*speed*/
+							0/*Count.*/
+						)
+					);
+					update( enemigo[e].person,enemigo[e].dim );
+					update( enemigo[e].person_impart,new dim2d( x,y,w,h ) );
+					enemigo[e].person.setAttribute("class","EN1");
+					enemigo[e].person_impart.setAttribute("class","EN1");
+					enemigo[e].person_impart.setAttribute("id","EN1_impart");
+					enemigo[e].disparo.person.setAttribute( "class","disparo" );
+					padre.appendChild( enemigo[e].person );
+					padre.appendChild( enemigo[e].person_impart );
+					enemigo[e].person.appendChild( enemigo[e].disparo.person );
+					/*La posicion de los futuros personage la cambiamos si la posicion x se sale de la pantalla.*/
+					/*TODO REPARAR el fondo que no crea el efecto de un espacio en movimiento.
+							Tambien hacer que los disparos se muevan con un contador en vez de todo a la vez.*/
+					if( x> ta[0]-( w*Math.sqrt( ta[0] )/6 ) ){
+						x=0;
+						y+=h+h;
+						count++;
+					}
+				}
+				/*is_moment es para determinar si debemos llamar otra ves con setTimeOut a la funcion move_enemigo.*/
+				es_momento_de_mover_enemigo=true;
+				/*Inicializamos el fondo.*/
+				for (var f=0,y=0; f<4; f++,y+=HEIGHT_FONDO ){
+					fondo[ f ]=new dim2d( 0,y,undefined,HEIGHT_FONDO );
+					fondo[ f ].p=D( "S"+( f+1 ) );
+					fondo[f].p.style.top=HEIGHT_FONDO*f;
+				}
+				S( true );/*recuerda set*/
+			}
+			function move_all(){/*Este es el primer interval: set[0]=setInterval( move_all,100 );*/
+					/*Movemos el fondo.*/
+					for ( var f=0; f<fondo.length; f++ ){
+						fondo[f].y+=1.5;
+						/*Ponemos el fondo detras del anterior cuando llege al punto para hacer el efecto de un espacio continuo.*/
+						if( fondo[f].y > MAX_FONDO_Y ){
+							fondo[f].y=-( fondo[f].h );
+						}
+						fondo[f].p.style.top=fondo[f].y+"px";
+					}
+					if ( es_momento_de_mover_enemigo ){
+						setTimeout( mover_enemigo,900 );
+						es_momento_de_mover_enemigo=false;
+					}
+					for ( var d=0; d<nave.disparo.length; d++){
+						if( nave.disparo[ d ].dim.y>-50 ){
+							nave.disparo[ d ].move_menos_y( nave.disparo[d].speed );
+						}
+					}
+				}
+				function mover_enemigo(){
+					for( var e=0;e<enemigo.length ;e++){
+						var x=enemigo[e].dim.x;
+						var y=enemigo[e].dim.y;
+						var speed=enemigo[e].speed;
+						switch( enemigo[e].count ){
+							case 1:
+								enemigo[e].move_all( x+speed,y );/*Recuerda hacer esta funcion.*/
+								break;
+							case 2:
+								enemigo[e].move_all( x,y+speed );/*Recuerda hacer esta funcion.*/
+								break;
+							case 3:
+								enemigo[e].move_all( x-speed,y );/*Recuerda hacer esta funcion.*/
+								break;
+							case 4:
+								enemigo[e].move_all( x,y-speed );
+								enemigo[e].count=0;
+								break;
+						}
+						enemigo[e].count++;
+					}
+					es_momento_de_mover_enemigo=true;
+				}
+				function move_enemigo_abajo(){
+					for (var e=0; e<enemigo.length; e++){
+							enemigo[e].move_all( enemigo[e].dim.x,enemigo[e].dim.y+enemigo[e].speed );
+					}
+				}
+				function CO(){/*Este es el segundo interval: set[1]=setInterval( CO );*/
+					/*Verificamos si un disparo enemigo le dio a la nave.*/
+					for ( var d=0; d<nave.disparo.length; d++){
+						var dim_n=nave.disparo[ d ].dim;
+						for ( var e=0; e<enemigo.length; e++){
+							var dim_e=enemigo[e].dim;
+							/*La incleible formula de distancia. Te retorna la distancia de un objecto permitiendo solo hacer pocos calculos para ver si la bala colocionó con el personaje.*/
+							if ( dim_n.dist( dim_e ) <dim_n.w+dim_e.w && dim_n.dist( dim_e ) <dim_n.h+dim_e.h ){
+								D( "almacenDis" ).removeChild( nave.disparo[d].person );
+								nave.disparo.splice( d,true );
+								if( enemigo[e].life ){
+									enemigo[e].imparto_recuperate();
+									/*Dejamos que el enemigo se vea atacado por unos 200ms*/
+									setTimeout( function(e){ enemigo[e].imparto_recuperate( false  ); }, 200,e );
+								}else{
+									var padre=D( "almacenEn" );
+									enemigo[e].person.removeChild( enemigo[e].disparo.person );
+									padre.removeChild( enemigo[e].person );
+									padre.removeChild( enemigo[e].person_impart );
+									/*Eliminamos la posicion e.*/
+									enemigo.splice( e,true );
+								}
+								break;
+							}
+						}
+					}/*peder enemigo*/
+					for( var e=0,dim=nave.dim; e<enemigo.length ;e++ ){
+						var disparo_e=enemigo[e].disparo;
+						var dim_e=disparo_e.dim;
+						if ( disparo_e.life ){
+							if ( dim_e.y<ta[1] ){/*Solo tratamos la bala si es menor al tamaño de la pantalla.*/
+								if( dim_e.dist( dim )<dim.w+dim_e.w && dim_e.dist( dim )<dim.h+dim_e.h ){
+									nave.imparto_recuperate();
+									/*Dejamos que la nave se vea atacada por unos 200ms.*/
+									setTimeout( function(){nave.imparto_recuperate(false);},200);
+									disparo_e.life=false;
+									disparo_e.person.style.display="none";
+									break;
+								}else{/*No hubo imparto por lo que debemos seguir moviendo la bala hasta llegar donde está el jugador.*/
+									disparo_e.person.style.top=( dim_e.y+=1 )+"px";
+								}
+							}else{
+								disparo_e.life=false;
+								disparo_e.person.style.display="none";
+								/*TODO Hacer: Investigar porque esto no funciona.*/
+							}
+						}else if( !Math.round( Math.random()*enemigo.length ) ){
+							disparo_e.move_all( enemigo[e].dim.x,enemigo[e].dim.y );
+							disparo_e.person.style.display="block";
+							enemigo[e].disparo.life=true;
+						}
+					}/*PERDER*/
+					if( nave.life<0 ){
+						if (confirm("          GAME OVER.\nQUIERES VOLVER A JUGAR.") )
+							reiniciar();
+						else{
+							S( false );
+						}
+					}
+					/*Si ya no hay enemigos entonces ganamos.*/
+					if( enemigo.length==0 ){
+						ganar();
+					}
+				}
+
+				function S(x){
+					if (x){
+						/*TODO VENIR: Ven AQUI CUANDO LLA TENGAS LA SEGUNDA FUNCION PARA EL FONDO.*/
+						set[0]=setInterval( move_all );/*Para el movimiento del juego.*/
+						set[1]=setInterval(CO);/*Para el analizis todo.*/
+						set[2]=setInterval( move_enemigo_abajo,second_enemigo_abajo );/*************************Para bajar a los enemigos cuando pase 30 segundo, despues empezará a bajar cada vez mas rapido.*/
+					}else{
+						game_over=false;
+						for ( var s=0; s<set.length; s++){
+							clearInterval( set[s] );
+						}
+					}
+				}
+			reset();
+			function reiniciar(){/*reinicia el juego*/
+				nave.recuperate( 3 );
+				S( false );
+				for ( var e=0,padre=D( "almacenEn" ); e<enemigo.length; e++ ){/*Eliminamos todos los enemigos.*/
+					enemigo[e].person.removeChild( enemigo[e].disparo.person );
+					padre.removeChild( enemigo[e].person );
+					padre.removeChild( enemigo[e].person_impart );
+					/*Eliminamos la posicion e.*/
+					enemigo.splice( e,true );
+				}
+				reset();
+			}
+		</script>
+	</body>
+</html>
+<!--/*cursor:help
+cursor:move
+cursor:all-scroll
+cursor:pointer
+cursor:pointer
+<div id="spacio"></div>
+overflow:hidden;
+auto
+astroide:asteroide.bmp
+nave_atacada.bmp
+nv
+*/-->
