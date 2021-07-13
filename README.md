@@ -32,4 +32,9 @@ Al futuro agregaré los siguientes:
      Un fondo musical.
    </li>
 </ul>
-   
+### Notas sobre el juego
+<ul>
+  <li>
+     La cantidad de enemigos varia deacuerdo al ancho de pantalla.
+  </li>
+</ul>
