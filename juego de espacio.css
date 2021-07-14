@@ -2,26 +2,22 @@ body{
 	background-color:black;
 	overflow:hidden;
 }
-#contenedor,.spacio,#fondo,#control,.disparo,.EN1,#rey_enemigo,#ataqueE,#vida{
-	position:absolute;
+#contenedor,#fondo,#fondo .espace,#control,.disparo,.EN1,#rey_enemigo,#ataqueE,#vida{
+	position:fixed;
 }
-#mina_voladora,#rey_enemigo,.EN1,.nave2,#nave,.spacio,#vida  div{
+#mina_voladora,#rey_enemigo,.EN1,.nave2,#nave,#vida  div{
 	background-repeat:no-repeat;
 	background-size:100%;
 }
-.spacio{
-	background-image:url( "./img/spacio.bmp" );
-	left:0px;
+#fondo .space{
+	/*Nesecitamos que el fondo ocupe toda la pantalla y se pueda mover sin importar los demas elementos.*/
+	left:0cm;
 	width:100vw;
 	height:100vh;
-	display:inline;
-}
-#fondo{
-	top:0%;
-	left:0%;
-	width:100%;
-	height:100%;
-	z-index:4;
+	z-index:4;/*Nesesitamos que el fondo se vea de ultimo.*/
+	position:fixed;
+	background-image:url( "./img/spacio.bmp" );
+	background-repeat:repeat;
 }
 /*Naves de muestra y el jugador.*/
 .nave{
