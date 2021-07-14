@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="es" onclick="F2(event)" onmousemove="nave.move_x( event.clientX );">
+<!--El w3c validator advierte que no debemos colocar los eventos en el elemento html, pero si lo coloco aquí toda la pagina captará el evento.-->
+<html lang="es" onclick="F2(event);" onmousemove="nave.move_x( event.clientX );">
 	<head>
 		<title>Space Beider( copia ).</title>
 		<meta charset="utf-8"/>
@@ -8,28 +9,28 @@
 		<style>
 		</style>
 	</head>
-	<body >
-		<!--Imagenes de la nave para simbolizar la vida del jugador en el lado derecho de la pantalla.-->
-		<div id="vida">
-			<!--generado por JavaScript-->
-		</div>
-		<div id="contenedor">
-			<div class="spacio" id="S1"></div>
-			<div class="spacio" id="S2"></div>
-			<div class="spacio" id="S3"></div>
-			<div class="spacio" id="S4"></div>
+	<body>
+		<main id="contenedor">
 			<div id="fondo">
+				<!--generado por JavaScript-->
+			</div>
+			<div id="game">
 				<!--Utilizo css para la nave porque no solo la nave será la que va a llevar la imagen.-->
+				<div id="spacio_2"><!--Esto tendrá la imagen del espacio y será movida por CSS.--></div>
 				<div id="nave" class="nave"></div>
+				<!--Imagenes de la nave para simbolizar la vida del jugador en el lado derecho de la pantalla.-->
+				<div id="vida">
+					<!--generado por JavaScript-->
+				</div>
 				<!--Uso la etiqueta img para las naves atacadas porque solo nesecito una.-->
 				<img src="./img/nave_atacada.bmp" id="naveAtack" alt="nave_atacada"/>
 				<div id="mina_voladora"></div>
+				<div id="almacenDis">/*para almacenar las balas generadas por JS.*/</div>
+				<!--<div id="almacenAtackE"></div>-->
+				<div id="almacenEn"></div>
 			</div>
-			<div id="almacenDis">/*para almacenar las balas generadas por JS.*/</div>
-			<!--<div id="almacenAtackE"></div>-->
-			<div id="almacenEn"></div>
-		</div>
-		<button type="button" onclick="reiniciar()" id="reiniciar">REINICIAR</button>
+			<button type="button" onclick="reiniciar()" id="reiniciar">REINICIAR</button>
+		</main>
 		<script src="./juego de espacio.js"></script>
 		<script>
 			"uses strict";
@@ -45,11 +46,11 @@
 			/*Recuerda Daniel el metodo splice del arrays acepta: splice( indice,/*?* /for_eliminar, ...items ); si se le pasa true a for_eliminar entonces se elimina el objeto, si se le pasa false se appenea un objeto en la posicion indicada.*/
 			/*constantes\/*/
 			const ta=[ screen.width,screen.availHeight ],
-					MAX_Y=ta[1],
-					MAX_DISPAROS=20,
-					MAX_FONDO_Y=ta[1]*2,
-					MAX_ENEMIGOS=3,//40,
-					HEIGHT_FONDO=ta[1];
+					MAX_Y=ta[1],/**/
+					MAX_FONDOS=3,/*Determina cuantos elementos fondos va haber en este juego.*/
+					MAX_FONDO_Y=200,/*200 porque para el fondo me sale mejor usar la unidad de medida: %*/
+					MAX_COLUNNA_ENEMIGOS=3,//40,
+					HEIGHT_FONDO=/*ta[1]*/100;/*El tamaño del fondo es toda la pantalla.*/ //Por ahora no lo nesecito.
 					/*TODO HACER: Cuando termines de hacer este juego debes cambiar este valor absoluto por uno relativo.*/
 			/*							( dims,life,person,person_impart,mostrar_life,disparos,count=0 )*/
 			var nave=new naves( /*MAX_Y es 360 debes cambiarlo al tamaño casi maximo de la pantalla con screen.availY-(screen.availY*95/100).*/
@@ -60,21 +61,34 @@
 				[4],/*mostrar_life*/
 				[ ],/*Disparos o attack.*/
 				undefined/*speed: Aqui no es necesario porque la velocidad la determina el usuario.*/
-			),fondo=[5],/*Será el contenedor de nuestro fondo.*/
-				enemigo=[ ],/*Será el contenedor para la clase enemigo.*/
-				second_enemigo_abajo=1000*30,
+			),
+			fondo=[4],/*Será el contenedor de nuestro fondo.*/
+			enemigo=[ ],/*Será el contenedor para la clase enemigo.*/
+			second_enemigo_abajo=1000*30,/*Es para determinar el tiempo en que los enemigos bajaran hasta el jugador.*/
 			set=[3],/*setInterval retrun CU;*/
 			es_momento_de_mover_enemigo=true/*Es para determinar si el enemigo se moverá o nó.*/;
 			/*Creamos nuevos elementos para simbolizar la vida de los jugadores.*/
-			nave.dim.y-=nave.dim.h * ( Math.sqrt( ta[1] )/4 );
-			update( nave.person,nave.dim );
-			update( nave.person_impart,nave.dim );
-			for ( var l=0,padre=D("vida"); l<=nave.life; l++){
-				nave.mostrar_life[l]=document.createElement("div");
-				nave.mostrar_life[l].setAttribute("id","vida"+l);
-				nave.mostrar_life[l].setAttribute("class","nave");
-				padre.appendChild( nave.mostrar_life[l] );
-			}
+			(function(){
+				/*Buscamos cual es la que nesecitamos deacuerdo al navegador. Tenia la idea de usar la funcion requesAnimationFrame para mover el fondo, pero al saber que android no lo soporta decidí dejar la idea.*/
+				/*window.requestAnimationFrame=window.requestAnimationFrame || window.mozRequestAnimationFrame || webkitRequestAnimationFrame || window.msRequestAnimationFrame;*/
+				nave.dim.y-=nave.dim.h * ( Math.sqrt( ta[1] )/4 );
+				update( nave.person,nave.dim );
+				update( nave.person_impart,nave.dim );
+				for ( var l=0,padre=D("vida"); l<=nave.life; l++){
+					nave.mostrar_life[l]=document.createElement("div");
+					nave.mostrar_life[l].setAttribute("id","vida"+l);
+					nave.mostrar_life[l].setAttribute("class","nave");
+					padre.appendChild( nave.mostrar_life[l] );
+				}
+				for ( var f=0,father=D( "fondo" ); f<MAX_FONDOS; f++ ){
+					/*child hijo en ingres.*/
+					var child=CRE( "div" );
+					child.setAttribute( "class","space" );
+					child.setAttribute( "name",'f'+f );
+					/*Le regalamos al hijo a su futuro padre y despues lo abandonamos.:)*/
+					father.appendChild( child );
+				}
+			})();
 			/*onclick: Creamos una nueva bala.*/
 			function F2(event){
 				var count=nave.disparo.length;/*Solo comodidad.*/
@@ -108,7 +122,7 @@
 				*/
 			}
 			function ganar(){
-				if( confirm( "FELICIDADES ME HAS GANADO QUIERES BOLBER A JUGAR...") ){
+				if( confirm( "FELICIDADES ME HAS GANADO QUIERES VOLVER A JUGAR...") ){
 					reiniciar();
 				}else{
 					S( false );
@@ -116,7 +130,7 @@
 				}
 			}
 			function reset(){/*Inicializamos todas las variables necesaria para el juego.*/
-				for ( var e=0,padre=D( "almacenEn" ),x=34,y=5,w=x,h=44,count=0; count<MAX_ENEMIGOS; e++,x+=w+w ){
+				for ( var e=0,padre=D( "almacenEn" ),x=34,y=5,w=x,h=44,count=0; count<MAX_COLUNNA_ENEMIGOS; e++,x+=w+w ){
 					enemigo.splice( e, false ,new enemigos(/*Jeje Cuantos comentarios.*/
 						new dim2d( x,y,w,h ),/*dim*/
 							4,/*life*/
@@ -157,22 +171,22 @@
 				/*is_moment es para determinar si debemos llamar otra ves con setTimeOut a la funcion move_enemigo.*/
 				es_momento_de_mover_enemigo=true;
 				/*Inicializamos el fondo.*/
-				for (var f=0,y=0; f<4; f++,y+=HEIGHT_FONDO ){
-					fondo[ f ]=new dim2d( 0,y,undefined,HEIGHT_FONDO );
-					fondo[ f ].p=D( "S"+( f+1 ) );
-					fondo[f].p.style.top=HEIGHT_FONDO*f;
+				for (var f=0,y=0,fondos=document.getElementsByClassName( "space" ); f<fondos.length; f++,y=-100*f/*-( HEIGHT_FONDO*f )*/ ){
+					fondo[ f ]=new dim2d( undefined,y,undefined,HEIGHT_FONDO );
+					fondo[ f ].p=fondos[f];
+					fondo[f].p.style.top=y+"%";
 				}
 				S( true );/*recuerda set*/
 			}
 			function move_all(){/*Este es el primer interval: set[0]=setInterval( move_all,100 );*/
 					/*Movemos el fondo.*/
 					for ( var f=0; f<fondo.length; f++ ){
-						fondo[f].y+=1.5;
+						fondo[f].y+=1;
 						/*Ponemos el fondo detras del anterior cuando llege al punto para hacer el efecto de un espacio continuo.*/
 						if( fondo[f].y > MAX_FONDO_Y ){
-							fondo[f].y=-( fondo[f].h );
+							fondo[f].y=-100;/*( fondo[f].h );*/
 						}
-						fondo[f].p.style.top=fondo[f].y+"px";
+						fondo[f].p.style.top=fondo[f].y+"%";
 					}
 					if ( es_momento_de_mover_enemigo ){
 						setTimeout( mover_enemigo,900 );
@@ -211,11 +225,6 @@
 				function move_enemigo_abajo(){
 					for (var e=0; e<enemigo.length; e++){
 							enemigo[e].move_all( enemigo[e].dim.x,enemigo[e].dim.y+enemigo[e].speed );
-							if ( enemigo[e].dim.y>=nave.dim.y ){
-								/*Si el enemigo llega a la posicion de la nave: Entonces se termina el juego.*/
-								nave.life=-1;
-								break;
-							}
 					}
 				}
 				function CO(){/*Este es el segundo interval: set[1]=setInterval( CO );*/
@@ -231,7 +240,12 @@
 								if( enemigo[e].life ){
 									enemigo[e].imparto_recuperate();
 									/*Dejamos que el enemigo se vea atacado por unos 200ms*/
-									setTimeout( function(e){ enemigo[e].imparto_recuperate( false  ); }, 200,e );
+									setTimeout( function(e){
+										/*Cuando el jugador dispara mucho disparo por segundo puede que esto se ejecute en el mismo momento que esta posición fué liberada de la memotia por lo tanto lee un arrays que ya no existe y por eso que verifico si la variable está definida o nó, solo para evitar errores en tiempo de ejecución.*/
+										if( enemigo[e]!=undefined ){
+											enemigo[e].imparto_recuperate( false  );
+										}
+									}, 200,e );
 								}else{
 									var padre=D( "almacenEn" );
 									enemigo[e].person.removeChild( enemigo[e].disparo.person );
@@ -290,7 +304,6 @@
 						set[1]=setInterval(CO);/*Para el analizis todo.*/
 						set[2]=setInterval( move_enemigo_abajo,second_enemigo_abajo );/*************************Para bajar a los enemigos cuando pase 30 segundo, despues empezará a bajar cada vez mas rapido.*/
 					}else{
-						game_over=false;
 						for ( var s=0; s<set.length; s++){
 							clearInterval( set[s] );
 						}
@@ -300,7 +313,7 @@
 			function reiniciar(){/*reinicia el juego*/
 				nave.recuperate( 3 );
 				S( false );
-				/*Para eliminar todo el arrays debemos empezar por el ultimo elemento y hací evitar que el indice camine por una posicion no adecuada.*/
+				/*Comenzamos por la ultima posicion del arrays porque a medida que el arrays baja debemos disminuir el contador.*/
 				for ( var e=enemigo.length-1,padre=D( "almacenEn" ); e>=0; e-- ){/*Eliminamos todos los enemigos.*/
 					enemigo[e].person.removeChild( enemigo[e].disparo.person );
 					padre.removeChild( enemigo[e].person );
