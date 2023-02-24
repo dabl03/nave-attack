@@ -1,4 +1,4 @@
-# nave-atack
+# nave-attack
 Este es un juego sobre una nave que vuela por el espacio y es constantemente atacada por unos enemigos.<br/>
 ## Como se juega
 En PC con mouse: Para mover al Jugador solo debes mover el mouse de izquierda a derecha y precionar click para atacar.<br/>
