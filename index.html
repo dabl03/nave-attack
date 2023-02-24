@@ -74,15 +74,15 @@
 				nave.dim.y-=nave.dim.h * ( Math.sqrt( ta[1] )/4 );
 				update( nave.person,nave.dim );
 				update( nave.person_impart,nave.dim );
-				for ( var l=0,padre=D("vida"); l<=nave.life; l++){
+				for ( let l=0,padre=D("vida"); l<=nave.life; l++){
 					nave.mostrar_life[l]=document.createElement("div");
 					nave.mostrar_life[l].setAttribute("id","vida"+l);
 					nave.mostrar_life[l].setAttribute("class","nave");
 					padre.appendChild( nave.mostrar_life[l] );
 				}
-				for ( var f=0,father=D( "fondo" ); f<MAX_FONDOS; f++ ){
+				for ( let f=0,father=D( "fondo" ); f<MAX_FONDOS; f++ ){
 					/*child hijo en ingres.*/
-					var child=CRE( "div" );
+					let child=CRE( "div" );
 					child.setAttribute( "class","space" );
 					child.setAttribute( "name",'f'+f );
 					/*Le regalamos al hijo a su futuro padre y despues lo abandonamos.:)*/
@@ -91,7 +91,7 @@
 			})();
 			/*onclick: Creamos una nueva bala.*/
 			function F2(event){
-				var count=nave.disparo.length;/*Solo comodidad.*/
+				let count=nave.disparo.length;/*Solo comodidad.*/
 				nave.disparo.splice( 
 					count,/*Indice para agregar.*/
 					false,/*Is deleted. No queremos eliminar un objeto lo que queremos es agregarlo*/
@@ -129,8 +129,8 @@
 					alert("GRACIAS POR JUGAR");
 				}
 			}
-			function reset(){/*Inicializamos todas las variables necesaria para el juego.*/
-				for ( var e=0,padre=D( "almacenEn" ),x=34,y=5,w=x,h=44,count=0; count<MAX_COLUNNA_ENEMIGOS; e++,x+=w+w ){
+			function reset(){/*Inicializamos todas las letiables necesaria para el juego.*/
+				for ( let e=0,padre=D( "almacenEn" ),x=34,y=5,w=x,h=44,count=0; count<MAX_COLUNNA_ENEMIGOS; e++,x+=w+w ){
 					enemigo.splice( e, false ,new enemigos(/*Jeje Cuantos comentarios.*/
 						new dim2d( x,y,w,h ),/*dim*/
 							4,/*life*/
@@ -171,7 +171,7 @@
 				/*is_moment es para determinar si debemos llamar otra ves con setTimeOut a la funcion move_enemigo.*/
 				es_momento_de_mover_enemigo=true;
 				/*Inicializamos el fondo.*/
-				for (var f=0,y=0,fondos=document.getElementsByClassName( "space" ); f<fondos.length; f++,y=-100*f/*-( HEIGHT_FONDO*f )*/ ){
+				for (let f=0,y=0,fondos=document.getElementsByClassName( "space" ); f<fondos.length; f++,y=-100*f/*-( HEIGHT_FONDO*f )*/ ){
 					fondo[ f ]=new dim2d( undefined,y,undefined,HEIGHT_FONDO );
 					fondo[ f ].p=fondos[f];
 					fondo[f].p.style.top=y+"%";
@@ -180,7 +180,7 @@
 			}
 			function move_all(){/*Este es el primer interval: set[0]=setInterval( move_all,100 );*/
 					/*Movemos el fondo.*/
-					for ( var f=0; f<fondo.length; f++ ){
+					for ( let f=0; f<fondo.length; f++ ){
 						fondo[f].y+=1;
 						/*Ponemos el fondo detras del anterior cuando llege al punto para hacer el efecto de un espacio continuo.*/
 						if( fondo[f].y > MAX_FONDO_Y ){
@@ -192,17 +192,17 @@
 						setTimeout( mover_enemigo,900 );
 						es_momento_de_mover_enemigo=false;
 					}
-					for ( var d=0; d<nave.disparo.length; d++){
+					for ( let d=0; d<nave.disparo.length; d++){
 						if( nave.disparo[ d ].dim.y>-50 ){
 							nave.disparo[ d ].move_menos_y( nave.disparo[d].speed );
 						}
 					}
 				}
 				function mover_enemigo(){
-					for( var e=0;e<enemigo.length ;e++){
-						var x=enemigo[e].dim.x;
-						var y=enemigo[e].dim.y;
-						var speed=enemigo[e].speed;
+					for( let e=0;e<enemigo.length ;e++){
+						let x=enemigo[e].dim.x;
+						let y=enemigo[e].dim.y;
+						let speed=enemigo[e].speed;
 						switch( enemigo[e].count ){
 							case 1:
 								enemigo[e].move_all( x+speed,y );/*Recuerda hacer esta funcion.*/
@@ -223,16 +223,16 @@
 					es_momento_de_mover_enemigo=true;
 				}
 				function move_enemigo_abajo(){
-					for (var e=0; e<enemigo.length; e++){
+					for (let e=0; e<enemigo.length; e++){
 							enemigo[e].move_all( enemigo[e].dim.x,enemigo[e].dim.y+enemigo[e].speed );
 					}
 				}
 				function CO(){/*Este es el segundo interval: set[1]=setInterval( CO );*/
 					/*Verificamos si un disparo enemigo le dio a la nave.*/
-					for ( var d=0; d<nave.disparo.length; d++){
-						var dim_n=nave.disparo[ d ].dim;
-						for ( var e=0; e<enemigo.length; e++){
-							var dim_e=enemigo[e].dim;
+					for ( let d=0; d<nave.disparo.length; d++){
+						let dim_n=nave.disparo[ d ].dim;
+						for ( let e=0; e<enemigo.length; e++){
+							let dim_e=enemigo[e].dim;
 							/*La incleible formula de distancia. Te retorna la distancia de un objecto permitiendo solo hacer pocos calculos para ver si la bala colocionó con el personaje.*/
 							if ( dim_n.dist( dim_e ) <dim_n.w+dim_e.w && dim_n.dist( dim_e ) <dim_n.h+dim_e.h ){
 								D( "almacenDis" ).removeChild( nave.disparo[d].person );
@@ -247,7 +247,7 @@
 										}
 									}, 200,e );
 								}else{
-									var padre=D( "almacenEn" );
+									let padre=D( "almacenEn" );
 									enemigo[e].person.removeChild( enemigo[e].disparo.person );
 									padre.removeChild( enemigo[e].person );
 									padre.removeChild( enemigo[e].person_impart );
@@ -258,9 +258,9 @@
 							}
 						}
 					}/*peder enemigo*/
-					for( var e=0,dim=nave.dim; e<enemigo.length ;e++ ){
-						var disparo_e=enemigo[e].disparo;
-						var dim_e=disparo_e.dim;
+					for( let e=0,dim=nave.dim; e<enemigo.length ;e++ ){
+						let disparo_e=enemigo[e].disparo;
+						let dim_e=disparo_e.dim;
 						if ( disparo_e.life ){
 							if ( dim_e.y<ta[1] ){/*Solo tratamos la bala si es menor al tamaño de la pantalla.*/
 								if( dim_e.dist( dim )<dim.w+dim_e.w && dim_e.dist( dim )<dim.h+dim_e.h ){
@@ -304,7 +304,7 @@
 						set[1]=setInterval(CO);/*Para el analizis todo.*/
 						set[2]=setInterval( move_enemigo_abajo,second_enemigo_abajo );/*************************Para bajar a los enemigos cuando pase 30 segundo, despues empezará a bajar cada vez mas rapido.*/
 					}else{
-						for ( var s=0; s<set.length; s++){
+						for ( let s=0; s<set.length; s++){
 							clearInterval( set[s] );
 						}
 					}
@@ -314,7 +314,7 @@
 				nave.recuperate( 3 );
 				S( false );
 				/*Comenzamos por la ultima posicion del arrays porque a medida que el arrays baja debemos disminuir el contador.*/
-				for ( var e=enemigo.length-1,padre=D( "almacenEn" ); e>=0; e-- ){/*Eliminamos todos los enemigos.*/
+				for ( let e=enemigo.length-1,padre=D( "almacenEn" ); e>=0; e-- ){/*Eliminamos todos los enemigos.*/
 					enemigo[e].person.removeChild( enemigo[e].disparo.person );
 					padre.removeChild( enemigo[e].person );
 					padre.removeChild( enemigo[e].person_impart );
