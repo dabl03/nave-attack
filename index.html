@@ -52,6 +52,7 @@
 					MAX_COLUNNA_ENEMIGOS=3,//40,
 					HEIGHT_FONDO=/*ta[1]*/100;/*El tamaño del fondo es toda la pantalla.*/ //Por ahora no lo nesecito.
 					/*TODO HACER: Cuando termines de hacer este juego debes cambiar este valor absoluto por uno relativo.*/
+			const audio=new Audio("./music/the polyharmonic changes.mp3");
 			/*							( dims,life,person,person_impart,mostrar_life,disparos,count=0 )*/
 			var nave=new naves( /*MAX_Y es 360 debes cambiarlo al tamaño casi maximo de la pantalla con screen.availY-(screen.availY*95/100).*/
 				new dim2d(0,MAX_Y,30,20),/*dim*/
@@ -89,8 +90,27 @@
 					father.appendChild( child );
 				}
 			})();
+			function music_now(){
+				/**Nota por politica del navegador esto no se ejecuta automaticamente.:( pero si puede solo hay que iteratuar con la pagina primero:)*/
+				try{
+					audio.play();
+				}catch(e){
+					setTimeout(music_now,3000);
+				}
+				if (nave.life>0)
+					setTimeout(music_now,audio.duration*1000);
+				else{
+					audio.stop();
+					console.log("hola")
+				}
+			}
+			var is_click_first=true;
 			/*onclick: Creamos una nueva bala.*/
 			function F2(event){
+				if (is_click_first){
+					music_now();
+					is_click_first=false;
+				}
 				let count=nave.disparo.length;/*Solo comodidad.*/
 				nave.disparo.splice( 
 					count,/*Indice para agregar.*/
