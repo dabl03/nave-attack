@@ -1,38 +1,90 @@
-<!doctype html>
+﻿<!doctype html>
 <!--El w3c validator advierte que no debemos colocar los eventos en el elemento html, pero si lo coloco aquí toda la pagina captará el evento.-->
 <html lang="es" onclick="F2(event);" onmousemove="nave.move_x( event.clientX );">
-	<head>
-		<title>Nave Attack.</title>
-		<meta charset="utf-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<link rel="stylesheet" href="./juego de espacio.css"/>
-		<style>
-		</style>
-	</head>
+<head>
+    <title>Nave Attack.</title>
+    <meta charset="utf-8" />
+    <!--shrink-to-fit=no it is for safary navigator-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Juego de ataque por el espacio." />
+    <meta name="author" content="Daniel Briceño" />
+    <link rel="stylesheet" href="./juego de espacio.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+        body{
+            background-color:rgb(40, 44, 53);
+        }
+        #init{
+            display:block;
+        }
+        #game{
+            display:none;
+        }
+        #game-over{
+            display:none;
+        }
+        .logo img{
+            width:100%;
+            height:100%;
+        }
+        .logo {
+            width: 50vw;
+            height:20vh;
+        }
+        h1 {
+            position: absolute;
+            color:aqua;
+            width: 50%;
+            height: 100%;
+            top: 10%;
+        }
+    </style>
+</head>
 	<body>
-		<main id="contenedor">
-			<div id="fondo">
-				<!--generado por JavaScript-->
-			</div>
-			<div id="game">
-				<!--Utilizo css para la nave porque no solo la nave será la que va a llevar la imagen.-->
-				<div id="spacio_2"><!--Esto tendrá la imagen del espacio y será movida por CSS.--></div>
-				<div id="nave" class="nave"></div>
-				<!--Imagenes de la nave para simbolizar la vida del jugador en el lado derecho de la pantalla.-->
-				<div id="vida">
-					<!--generado por JavaScript-->
-				</div>
-				<!--Uso la etiqueta img para las naves atacadas porque solo nesecito una.-->
-				<img src="./img/nave_atacada.bmp" id="naveAtack" alt="nave_atacada"/>
-				<div id="mina_voladora"></div>
-				<div id="almacenDis">/*para almacenar las balas generadas por JS.*/</div>
-				<!--<div id="almacenAtackE"></div>-->
-				<div id="almacenEn"></div>
-			</div>
-			<button type="button" onclick="reiniciar()" id="reiniciar">REINICIAR</button>
-		</main>
-		<script src="./juego de espacio.js"></script>
-		<script>
+        <div id="init">
+            <!--Container to init-->
+            <div class="logo container">
+                <br />
+                <img src="./img/logo.png" class="img-fluid position-relative"/>
+                <h1 class="text-center">Nave-Attack</h1>
+            </div>
+            <br/>
+            <br/>
+            <div class="container">
+                <div class="row d-flex justify-content-center text-center">
+                    <div class="col-4">
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-success" type="init-game">Gamer</a>
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-dark" type="init-option">option</a>
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-info" type="help">Help</a>
+                    </div>
+                </div>
+            </div>
+            <main id="contenedor" class="">
+                <div id="fondo">
+                    <!--generado por JavaScript-->
+                </div>
+                <div id="game">
+                    <!--Utilizo css para la nave porque no solo la nave será la que va a llevar la imagen.-->
+                    <div id="spacio_2"><!--Esto tendrá la imagen del espacio y será movida por CSS.--></div>
+                    <div id="nave" class="nave"></div>
+                    <!--Imagenes de la nave para simbolizar la vida del jugador en el lado derecho de la pantalla.-->
+                    <div id="vida">
+                        <!--generado por JavaScript-->
+                    </div>
+                    <!--Uso la etiqueta img para las naves atacadas porque solo nesecito una.-->
+                    <img src="./img/nave_atacada.bmp" id="naveAtack" alt="nave_atacada" />
+                    <div id="mina_voladora"></div>
+                    <div id="almacenDis">/*para almacenar las balas generadas por JS.*/</div>
+                    <!--<div id="almacenAtackE"></div>-->
+                    <div id="almacenEn"></div>
+                </div>
+                <button type="button" onclick="reiniciar()" id="reiniciar">REINICIAR</button>
+            </main>
+            <div id="game-over">
+                <!--is gamer over or you win.-->
+            </div>
+            <script src="./juego de espacio.js"></script>
+            <script>
 			"uses strict";
 			/*Crear un intervalo o una reques animation para mover el fondo y los personajes.
 				En el intervalo actual es el que usaremos para determinar todo.
@@ -69,7 +121,7 @@
 			set=[3],/*setInterval retrun CU;*/
 			es_momento_de_mover_enemigo=true/*Es para determinar si el enemigo se moverá o nó.*/;
 			/*Creamos nuevos elementos para simbolizar la vida de los jugadores.*/
-			(function(){
+			function init_game(){
 				/*Buscamos cual es la que nesecitamos deacuerdo al navegador. Tenia la idea de usar la funcion requesAnimationFrame para mover el fondo, pero al saber que android no lo soporta decidí dejar la idea.*/
 				/*window.requestAnimationFrame=window.requestAnimationFrame || window.mozRequestAnimationFrame || webkitRequestAnimationFrame || window.msRequestAnimationFrame;*/
 				nave.dim.y-=nave.dim.h * ( Math.sqrt( ta[1] )/4 );
@@ -89,7 +141,7 @@
 					/*Le regalamos al hijo a su futuro padre y despues lo abandonamos.:)*/
 					father.appendChild( child );
 				}
-			})();
+			}
 			function music_now(){
 				/**Nota por politica del navegador esto no se ejecuta automaticamente.:( pero si puede solo hay que iteratuar con la pagina primero:)*/
 				try{
@@ -112,7 +164,7 @@
 					is_click_first=false;
 				}
 				let count=nave.disparo.length;/*Solo comodidad.*/
-				nave.disparo.splice( 
+				nave.disparo.splice(
 					count,/*Indice para agregar.*/
 					false,/*Is deleted. No queremos eliminar un objeto lo que queremos es agregarlo*/
 					new disparos( /*value*/
@@ -329,7 +381,7 @@
 						}
 					}
 				}
-			reset();
+			//reset();
 			function reiniciar(){/*reinicia el juego*/
 				nave.recuperate( 3 );
 				S( false );
@@ -343,8 +395,8 @@
 				}
 				reset();
 			}
-		</script>
-	</body>
+            </script>
+</body>
 </html>
 <!--/*cursor:help
 cursor:move
