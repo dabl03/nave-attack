@@ -2,11 +2,12 @@
 function RANDOM( x ){
 	return parseInt( Math.random()*x );
 }
-function D( x ){
+
+function get_element( x ){
 	return document.getElementById( x );
 }
 
-function CRE( x ){
+function create_element( x ){
 	return document.createElement( x );
 }
 function update( obj,dim,medida="px" ){
@@ -39,20 +40,13 @@ class persons{
 	}
 	/*TODO BUSCAR: Buscar la mejor manera de usar clases.*/
 	move_all( x,y,medida="px" ){
-		/*
-		Hacer esto: p.s.top=( this.x=x )+medida es lo mismo en eficiencia  que esto:
-		p.s.top=x+medida;
-		this.x=x;
-		Solo que la primera es mas facil de leer.
-		*/
 		this.person.style.left=( this.dim.x=x )+medida;
 		this.person.style.top=( this.dim.y=y )+medida;
 	}
 };
 class naves extends persons{
-	constructor( dims,life,person,person_impart,mostrar_life,disparo,speed,count=0 ){
+	constructor( dims,life,person,mostrar_life,disparo,speed,count=0 ){
 		super( dims,life,person,disparo,speed );
-		this.person_impart=person_impart;
 		this.mostrar_life=mostrar_life;
 		this.count=count;/*Será el indice de las balas o los disparos.*/
 	}
@@ -60,28 +54,28 @@ class naves extends persons{
 	imparto_recuperate(impart_=true){
 		/*Si ls bala impartó la nave entonces vajamos la vida y intercambiamos la variable person con person_impart.*/
 		if ( impart_ ){
-			this.person.style.display="none";
-			this.person_impart.style.display="block";
+			this.person.classList.add("nave_attack");
 			if ( this.life>=0 ){/*Cuestion de seguridad.*/
 				this.mostrar_life[ this.life ].style.display="none";
 			}
 			this.life--;
 		}else{
-			this.person.style.display="block";
-			this.person_impart.style.display="none";
+			this.person.classList.remove("nave_attack");
 		}
 	}
 	recuperate( life ){
 		this.life=life;
-		for ( var i=0; i<this.mostrar_life.length; i++){
+		for ( let i=0; i<this.mostrar_life.length; i++){
 			this.mostrar_life[i].style.display="block";
 		}
-		this.person.style.display="block";
-		this.person_impart.style.display="none";
+		if (this.person.classList.contains("nave_attack"))
+			this.person.classList.remove("nave_attack");
 	}
 	move_x( x,medicion="px" ){
 		this.person.style.left=( this.dim.x=x )+medicion;
-		this.person_impart.style.left=x+medicion;
+	}
+	move_y( y,medicion="px" ){
+		this.person.style.top=( this.dim.y=y )+medicion;
 	}
 }
 class disparos extends persons{
@@ -94,26 +88,27 @@ class disparos extends persons{
 	}
 }
 class enemigos extends persons{
-	constructor( dims,life,person,person_impart,disparo,speed,count=0 ){
-		super( dims,life,person,disparo,speed );
-		this.person_impart=person_impart;
+	constructor( dims,life,class_,disparo,speed,count=0 ){
+		super( dims,life,document.createElement("div"),disparo,speed );
+		this.class_=class_;
 		this.count=count;/*Será usado para crear el patron del movimiento enemigo.*/
+
+		this.person.classList.add(this.class_);//Le damos la clase enemigo para que css se encargue de lo demas.
+		
+		this.person.appendChild(this.disparo.person);
+		update(this.person,this.dim);//Actualizamos las dimensiones.
 	}
 	move_all( x,y,medida="px" ){
 		this.person.style.left=( this.dim.x=x )+medida;
 		this.person.style.top=( this.dim.y=y )+medida;
-		this.person_impart.style.left= x+medida;
-		this.person_impart.style.top= y+medida;
 	}
 	imparto_recuperate(impart_=true){
-		/*Si ls bala impartó la nave entonces vajamos la vida y intercambiamos la variable person con person_impart.*/
+		let class_=this.class_+"_impart";
 		if ( impart_ ){
-			this.person.style.display="none";
-			this.person_impart.style.display="block";
+			this.person.classList.add(class_);
 			this.life--;
-		}else{
-			this.person.style.display="block";
-			this.person_impart.style.display="none";
+			return;
 		}
+		this.person.classList.remove(class_);
 	}
 };

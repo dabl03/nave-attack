@@ -1,40 +1,25 @@
-# nave-atack
+# nave-attack
 Este es un juego sobre una nave que vuela por el espacio y es constantemente atacada por unos enemigos.<br/>
 ## Como se juega
-En PC con mouse: Para mover al Jugador solo debes mover el mouse de izquierda a derecha y precionar click para atacar.<br/>
-En dispocitivos moviles: Por ahora no le he dado soporte para la pantalla tactil, por lo que para moverlo solo debe precionar click en la pantalla.<br/>
-Los enemigos son cabezas gigantes que solo pueden disparar una vez. Se mueven en el sentido de la manecilla de reloj y disparan unos rallos que deberas equivar lo mas que puedas.<br/>
+En PC con mouse: Para mover al Jugador solo debes mover el mouse de izquierda a derecha y presionar click para atacar.<br/>
+En dispositivos móviles: Por ahora no le he dado soporte para la pantalla táctil, por lo que para moverlo solo debe presionar click en la pantalla.<br/>
+Los enemigos son cabezas gigantes que solo pueden disparar una vez. Se mueven en el sentido de la manecilla de reloj y disparan unos rallos que deberías esquivar lo más que puedas.<br/>
 Cada 30segundos los enemigos bajarán y si logran llegar a donde la nave llega entonces se acaba el juego.<br/>
 <br/>
-La nave del jugador solo tiene 4 vidas, por lo que debes equivar tantos disparos como puedas.<br/>
-La nave pueden disparar tantas balas como se quiera. En un futuro le agregaré un retrazo a esta función.
-## Ploblemas
-El fondo no se mueve como deberia en pantallas pequeñas logrando hacer que se vea un gueco vació.
+La nave del jugador solo tiene 4 vidas, por lo que debes esquivar tantos disparos como puedas.<br/>
+La nave puede disparar tantas balas como se quiera. En un futuro le agregaré un retraso a esta función.
+## Problemas
+El fondo no se mueve como debería en pantallas pequeñas logrando hacer que se vea un hueco vació.
 ## Futuras actualizaciones
 Al futuro agregaré los siguientes:
 <ul>
    <li>
-     Un rey enemigo que aparesca cuando ya no quede enemigos.
+     Un rey enemigo que aparezca cuando ya no quede enemigos.
    </li>
    <li>
      Poderes y aumentadores de vidas para las nave.
    </li>
    <li>
-     Enemigos con mas velocidad y capacidas para: disparar mas balas y aumentar el daño para la nave.
+     Enemigos con más velocidad y capacidad para: Disparar más balas y aumentar el daño para la nave.
    </li>
-   <li>
-     Nuevos enemigos...
-   </li>
-   <li>
-     Nuevas naves.
-   </li>
-   <li>
-     Un fondo musical.
-   </li>
-</ul>
-### Notas sobre el juego
-<ul>
-  <li>
-     La cantidad de enemigos varia deacuerdo al ancho de pantalla.
-  </li>
 </ul>

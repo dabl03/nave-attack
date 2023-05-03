@@ -27,6 +27,9 @@ body{
 	display:block;
 	z-index:2;
 }
+.nave_attack{
+	background-image:url( "./img/nave_atacada.bmp" );
+}
 /*Nave del jugador.*/
 #nave{
 	position:fixed;
@@ -80,9 +83,8 @@ body{
 	top:0%;
 	z-index:2;
 }
-#EN1_impart{
+.EN1_impart{
 	background-image:url( "./img/enemigo1A.bmp" );
-	display:none;
 }
 #rey_enemigo{
 	background-image:url( "./img/rey_enemigo.bmp" );
