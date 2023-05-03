@@ -1,6 +1,6 @@
-﻿<!doctype html>
+<!doctype html>
 <!--El w3c validator advierte que no debemos colocar los eventos en el elemento html, pero si lo coloco aquí toda la pagina captará el evento.-->
-<html lang="es" onclick="F2(event);" onmousemove="nave.move_x( event.clientX );">
+<html lang="es">
 <head>
     <title>Nave Attack.</title>
     <meta charset="utf-8" />
@@ -8,17 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Juego de ataque por el espacio." />
     <meta name="author" content="Daniel Briceño" />
-    <link rel="stylesheet" href="./juego de espacio.css" />
+    <!--bootstrap-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!--End bootstrap-->
+    <!--Create JS-->
+    <script type="text/javascript" src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+    <script type="text/javascript" src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
+    <script type="text/javascript" src="https://code.createjs.com/1.0.0/soundjs.min.js"></script>
+    <script type="text/javascript" src="https://code.createjs.com/1.0.0/preloadjs.min.js"></script>
+    <!--End Create JS-->
+    <!--Pixel font of https://fonts.google.com/specimen/VT323 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=VT323">
+    <!--End Pixel font-->
+    <link rel="stylesheet" href="./juego de espacio.css" />
     <style>
-        body {
-            background-color: rgb(40, 44, 53);
+        * {
+            font-family: "VT323", "console", "arial";
         }
-
-        #init {
-            display: block;
+        body{
+            background-color:black;
         }
-
         #game {
             display: none;
         }
@@ -26,7 +36,11 @@
         #game-over {
             display: none;
         }
-
+        /*Menu de inicio.*/
+        #init{
+            height: 100vh;
+            display:none;
+        }
         .logo {
             width: 90vw;
             height: 20vh;
@@ -41,24 +55,45 @@
         h1 {
             color: aqua;
         }
+        #canvas-game{
+        	z-index: -1;
+        	position:fixed;
+        	top:0;
+        	left:0;
+        }
+        #text-init{
+        	height: 100%;
+        	cursor:pointer;
+        	display: none;
+        }
+        #text-init button{
+        	position:relative;
+        	top:50%;
+        	color:white;
+        	background-color:black;
+        }
     </style>
 </head>
-<body>
-    <div id="init">
+<body onload="init();">
+	<canvas id="canvas-game">Su navegador no es compatible con este juego, la razon es porque esta desactualizado. Actualize a chrome o microsoft edge.:)</canvas>
+	<p id="text-init" class="container-fluid position-fixed text-center h1" onclick="menu_init();this.style.display='none';"><button class="btn btn-dark">One click to start</button></p>
+    <header id="init" class="container-fluid">
         <!--Container to init-->
-        <div class="logo container justify-content-center">
-            <h1 class="text-center">Nave-Attack</h1>
-            <img src="./img/logo.png" />
+        <div class="logo container-fluid my-5 border text-center">
+            <h1>Nave-Attack</h1>
+            <img src="./media/logo.png" />
         </div>
-        <div class="container"></div>
-        <div class="row d-flex left-50 text-center" style="justify-content: center;">
-            <div class="col-4">
-                <a href="#" class="list-group-item list-group-item-action list-group-item-success" type="init-game">Gamer</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-dark" type="init-option">option</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-info" type="help">Help</a>
+        <!--button list-->
+        <div class="container-fluid pt-5">
+            <div class="row d-flex left-50 text-center" style="justify-content: center;">
+                <div class="col-4">
+                    <a href="#" class="list-group-item list-group-item-action list-group-item-success" type="init-game">Gamer</a>
+                    <a href="#" class="list-group-item list-group-item-action list-group-item-dark" type="init-option">option</a>
+                    <a href="#" class="list-group-item list-group-item-action list-group-item-info" type="help">Help</a>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
     <div id="contenedor" class="">
         <div id="fondo">
             <!--generado por JavaScript-->
@@ -72,20 +107,182 @@
                 <!--generado por JavaScript-->
             </div>
             <!--Uso la etiqueta img para las naves atacadas porque solo nesecito una.-->
-            <img src="./img/nave_atacada.bmp" id="naveAtack" alt="nave_atacada" />
+            <img src="./media/nave_atacada.bmp" id="naveAtack" alt="nave_atacada" />
             <div id="mina_voladora"></div>
             <div id="almacenDis">/*para almacenar las balas generadas por JS.*/</div>
             <!--<div id="almacenAtackE"></div>-->
             <div id="almacenEn"></div>
         </div>
-        <button type="button" onclick="reiniciar()" id="reiniciar">REINICIAR</button>
+        <!--<button type="button" onclick="reiniciar()" id="reiniciar">REINICIAR</button>-->
     </div>
     <div id="game-over">
         <!--is gamer over or you win.-->
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="./juego de espacio.js"></script>
     <script>
+        var SCREEN_WIDTH=0,
+        SCREEN_HEIGHT=0;
+        /*Canvas and createJS vars*/
+    	var canvas;
+        var ctx;
+        var stage;
+        var queue;
+        /*Game vars:*/
+        var scene=1;//1 = click for continue.
+        var text={};
+        var star_background=new createjs.MovieClip({loop:-1, labels: {start: 0, middle: 20}});
+        const manifest=[
+        	/*Video*/
+        	{id:"video-init-star",src:"./media/start-video.mp4",type:createjs.Types.VIDEO},
+        	/*Image*/
+        		//nave:
+        	{id:"img-nave-1",src:"./media/nave.bmp",type:createjs.Types.IMAGE},
+        	{id:"img-nave-1-attack",src:"./media/nave_atacada.bmp",type:createjs.Types.IMAGE},
+        	{id:"img-nave-secuencia-fuego",src:"./media/secuencia-fuego.png",type:createjs.Types.IMAGE},
+        		//Enemy:
+        	{id:"img-enemy-1",src:"./media/enemigo1.bmp",type:createjs.Types.IMAGE},
+        	{id:"img-enemy-1-attack",src:"./media/enemigo1A.bmp",type:createjs.Types.IMAGE},
+        	{id:"img-enemy-king-1",src:"./media/rey_enemigo.bmp",type:createjs.Types.IMAGE}
+        	/*Sound*/
+        ];
+        var color_screen="#000";
+        var count_loads=0;
+        /*Objects*/
+        var background_shape=new createjs.Shape();//El fondo
+        var gf=background_shape.graphics;
+        const TITLE_TEXT="Nave Attack";//Texto normal.
+        var child={
+        	"add":{
+        		"background-shape":background_shape,
+        		"text-title-click":new createjs.Text(TITLE_TEXT,"5em VT323","aqua")
+        	},
+        	"remove":{},
+        	"now":{}
+        };
+
+        function init(){
+            //Para cuando la pantalla cambie de tamaño
+            window.addEventListener('resize', resize_windows);
+            //Inicio toda las variables globales importante.
+            canvas=document.getElementById("canvas-game");
+            ctx=canvas.getContext("2d");
+            if (!ctx) return;
+
+            stage=new createjs.Stage(canvas);
+
+            queue= new createjs.LoadQueue();
+            queue.installPlugin(createjs.Sound);
+            //Comienza todo lo demas.
+            loadresource(queue);
+            resize_windows();
+            createjs.Ticker.setFPS(60);
+			createjs.Ticker.addEventListener("tick", update_all);
+        }
+        function resize_windows(){
+        	SCREEN_WIDTH=window.screen.availWidth;
+        	SCREEN_HEIGHT=window.screen.availHeight;
+        	canvas.setAttribute("width",SCREEN_WIDTH+"px");
+        	canvas.setAttribute("height",SCREEN_HEIGHT+"px");
+        	
+        }
+        function loadresource(q){
+        	/*var myBuffer = new createjs.VideoBuffer(myVideo);
+			var myBitmap = new Bitmap(myBuffer);-*/
+			q.on("fileload", function(e){
+				count_loads++;
+			}, this);
+			q.on("complete",function(){
+				document.getElementById("text-init").style.display="block";
+			});
+			q.loadManifest(manifest);
+        }
+        /**
+         * Ver menu de juego.
+         * @param  {[int]} s [escena del juego.]
+         * @return {[null]}
+         */
+        function menu_init(){
+        	document.querySelector("header").style.display="block";
+        	child["remove"]["text-title-click"]=child["now"]["text-title-click"];
+        	scene=3;
+        }
+        var v=0;
+        function update_all(e){
+        	/*Para agregar y eliminar objetos de la cola.*/
+        	update_child();
+        	switch (scene){
+        		case 1:
+        		if (count_loads==manifest.length){
+        			scene++;
+        			let video=queue.getResult("video-init-star");
+        			video.loop=true;
+                    video.muted=true;v=video;
+                    video.autoplay=true;
+                    video.play();
+        			child["now"]["video-init-star"]=new createjs.VideoBuffer(video);
+        		}
+        		case 2:
+        		//Texto titulo.
+                let title=child["now"]["text-title-click"];
+        		let dim_t=title.getBounds();
+        		title.x=SCREEN_WIDTH/2;
+        		title.y=SCREEN_HEIGHT/4-dim_t.height/2;
+        		title.textAlign="center";
+                if (scene==1) break;
+                case 3:
+                //Dibujamos el video cuadro a cuadro:)
+                let img=child["now"]["video-init-star"].getImage();
+                child["now"]["img-init-star"]=new createjs.Bitmap(img);
+                child["now"]["img-init-star"].setTransform(0,0,2,2);
+                child["remove"]["img-init-star"]=child["now"]["img-init-star"];
+
+        		break;
+        	}
+        	draw(e);
+        	
+        }
+        function draw(e){
+        	gf.clear().beginStroke("#000000").beginFill(color_screen).drawRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);//
+        	switch (scene){
+        		case 1:
+        		//Init- click on screen.
+        		gf.beginStroke("white").beginFill("blue").drawRect(SCREEN_WIDTH/3,SCREEN_HEIGHT/2,SCREEN_WIDTH/3,20)
+        		gf.beginStroke("white").beginFill("red").drawRect(SCREEN_WIDTH/3,SCREEN_HEIGHT/2,count_loads/manifest.length*(SCREEN_WIDTH/3),20);
+                break;
+                case 2:
+                case 3:
+                stage.addChildAt(child["now"]["img-init-star"],1);
+                if (scene==2) break;
+                /*Aqui va la escena*/
+
+        	}
+        	stage.update();
+        	//gf.draw(ctx);
+        }
+        /*Actualiza la cola de que se va a dibujar y elimina lo que no es necesario.*/
+        function update_child(){
+        	for (let i in child){
+        		if(i=="add"){
+        			for (let o in child["add"]){//Ponemos el objeto en el lienzo.
+        				if (child["add"][o]["index"]!=undefined){//Para agregarle un indice
+        					stage.addChildAt(child["add"][o]["obj"],child["add"][o]["index"]);
+        					child["now"][o]=child["add"][o]["obj"];//Y ponemos el objeto en now para su posterior eliminacion.
+        					continue;
+        				}
+        				stage.addChild(child["add"][o]);
+        				child["now"][o]=child["add"][o];//Y ponemos el objeto en now para su posterior eliminacion.
+        			}
+        			child["add"]={};//Ya no quedan objetos que poner:)
+        		}else if (i=="remove"){
+        			for (let o in child["remove"]){//Eliminamos los objetos.
+        				stage.removeChild(child["remove"][o]);
+        				delete child["now"][o];
+        			}
+        			child["remove"]={};
+        		}else{
+        			continue;
+        		}
+        	}
+        }
     </script>
 </body>
 </html>

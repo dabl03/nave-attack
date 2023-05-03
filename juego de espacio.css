@@ -1,7 +1,4 @@
-body{
-	background-color:black;
-	overflow:hidden;
-}
+
 #contenedor,#fondo,#fondo .espace,#control,.disparo,.EN1,#rey_enemigo,#ataqueE,#vida{
 	position:fixed;
 }
