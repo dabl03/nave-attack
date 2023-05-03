@@ -1,4 +1,5 @@
 # nave-attack
+<img src="./media/logo%20de%20licencia%20MIT.png"></img>
 > Bienvenido a la guerra entre dos especie, la raza humana contra los duog, busca tu nave y prepárate para matar al enemigo.
 
 ## ¿Qué es esto?
