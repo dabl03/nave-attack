@@ -5,7 +5,7 @@
 Este es un juego sobre una nave que vuela por el espacio y es constantemente atacada por unos enemigos.<br/>
 ## Como se juega
 En PC con mouse: Para mover al Jugador solo debes mover el mouse de izquierda a derecha y presionar click para atacar.<br/>
-En dispositivos móviles: Por ahora no le he dado soporte para la pantalla táctil, por lo que para moverlo solo debe presionar click en la pantalla.<br/>
+En dispositivos móviles: Dejas presionado la pantalla y la nave seguira tu dedos y disparara automaticamente.<br/>
 Los enemigos son cabezas gigantes que solo pueden disparar una vez. Se mueven en el sentido de la manecilla de reloj y disparan unos rallos que deberías esquivar lo más que puedas.<br/>
 Cada 30segundos los enemigos bajarán y si logran llegar a donde la nave llega entonces se acaba el juego.<br/>
 <br/>
